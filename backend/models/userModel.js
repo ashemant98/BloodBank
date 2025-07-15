@@ -17,6 +17,20 @@ const userSchema = new mongoose.Schema(
       unique: true,
       required: true,
     },
+    hospitalName: {
+      required: function () {
+        if (this.role === "hospital") return true;
+        else return false;
+      },
+      type: String,
+    },
+    ngoName: {
+      required: function () {
+        if (this.role === "NGO") return true;
+        else return false;
+      },
+      type: String,
+    },
   },
   { timestamps: true }
 );

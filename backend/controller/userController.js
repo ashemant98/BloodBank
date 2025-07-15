@@ -1,18 +1,19 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../models/userModel");
 
-
-
 const signupController = async (req, res) => {
   try {
-    const { role, username, password } = req.body;
+    const { username, password, hospitalName, ngoName, role } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await userModel.create({
-      role,
-      username,
-      password: hashedPassword,
-    });
 
+    const newUser = {
+      username,
+      role,
+      password: hashedPassword,
+    };
+    if (role === "hospital") newUser.hospitalName = hospitalName;
+    if (role === "NGO") newUser.ngoName = ngoName;
+    const result = await userModel.create(newUser);
     res.json({
       message: "account created successfully",
       result,
