@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../models/userModel");
+const JWT = require("jsonwebtoken");
 
 const signupController = async (req, res) => {
   try {
@@ -27,6 +28,42 @@ const signupController = async (req, res) => {
   }
 };
 
+const signInController = async (req, res) => {
+  const { username, password, role } = req.body;
+  const foundUser = await userModel.findOne({
+    username,
+    role,
+  });
+
+  if (foundUser) {
+    const matchPassword = await bcrypt.compare(password, foundUser.password);
+    if (matchPassword) {
+      const token = JWT.sign(
+        {
+          id: foundUser._id,
+        },
+        process.env.JWT_SECRET
+      );
+      res.json({
+        success: true,
+        message: "sign in successfull",
+        token,
+      });
+    } else {
+      res.status(403).json({
+        message: "wrong password",
+        success: false,
+      });
+    }
+  } else {
+    res.json({
+      message: "wrong Email or account not found",
+      success: false,
+    });
+  }
+};
+
 module.exports = {
   signupController,
+  signInController,
 };
