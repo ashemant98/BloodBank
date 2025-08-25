@@ -15,7 +15,8 @@ const signupController = async (req, res) => {
     if (role === "hospital") newUser.hospitalName = hospitalName;
     if (role === "NGO") newUser.ngoName = ngoName;
     const result = await userModel.create(newUser);
-    res.json({
+    res.status(200).json({
+      success: true,
       message: "account created successfully",
       result,
     });
