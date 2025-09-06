@@ -3,6 +3,8 @@ import axios from "axios"
 
 import Login from './Login'
 import InputForm from './inputForm'
+import store from '../redux/store'
+import { userSignin } from '../redux/features/auth/authActions'
 
 const Sign = () => {
 
@@ -16,18 +18,7 @@ const Sign = () => {
 
 
   const handleSubmit = async()=>{
-
-    console.log('inside handle submit')
-      const result = await axios.post('http://localhost:3000/api/v1/user/signup',{
-        username,
-        password,
-        role
-      })
-      
-      if(result.data.success)
-        alert("signup successfull")
-      else
-        alert("signup failed")
+   store.dispatch(userSignin({username, password , role}))
   }
 
 

@@ -49,6 +49,7 @@ const signInController = async (req, res) => {
         success: true,
         message: "sign in successfull",
         token,
+        user: foundUser,
       });
     } else {
       res.status(403).json({

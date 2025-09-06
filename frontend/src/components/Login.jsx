@@ -4,6 +4,8 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 
 import { useNavigate } from 'react-router-dom'
+import store from '../redux/store'
+import { userLogin } from '../redux/features/auth/authActions'
 
 
 
@@ -15,30 +17,13 @@ const Login = (props) => {
     const [password , setPassword] = useState("")
    
 
-     const handleSubmit = async()=>{
+     const handleSubmit = async(e)=>{
 
-        const result = await axios.post('http://localhost:3000/api/v1/user/signin' , {
-             username,
-            password,
-            role:props.role
-        })
+       
+      
+       store.dispatch(userLogin({username , password , role:props.role}))
 
-        if(result.data.success)
-        {
-            localStorage.setItem("token" , result.data.token)
-            toast.success(result.data.message)
-            navigate('/dashboard')
-            console.log(result);
-            
-        }
-        else{
-          toast.error(result.data.message)
-        }
      }
-
-
-
-
 
 
 
